@@ -13,8 +13,6 @@ extern crate serde_json;
 
 #[cfg(not(feature = "serde_macros"))]
 extern crate serde_codegen;
-#[cfg(not(feature = "serde_macros"))]
-extern crate syntex;
 
 use std::fs::File;
 use std::io::{Read, Write};
