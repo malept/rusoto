@@ -15,7 +15,7 @@ extern crate serde_json;
 extern crate serde_codegen;
 
 use std::fs::File;
-use std::io::{Read, Write};
+use std::io::{Write};
 use std::path::Path;
 
 use botocore::Service as BotocoreService;
@@ -57,17 +57,20 @@ pub fn generate(service: Service, output_path: &Path) {
 }
 
 fn botocore_generate(input_path: &Path, output_path: &Path) {
-    let mut input_file = File::open(input_path).expect(&format!(
-        "{:?} not found",
-        input_path,
-    ));
+    // let mut input_file = File::open(input_path).expect(&format!(
+    //     "{:?} not found",
+    //     input_path,
+    // ));
 
-    let mut service_data = String::new();
+    let service_data = "{\"version\":\"2.0\",\"metadata\":{
+  },
+  \"operations\":{},
+  \"apiversion\" : \"1\"}".to_string();
 
-    input_file.read_to_string(&mut service_data).expect(&format!(
-        "Failed to read {:?}",
-        input_path,
-    ));
+    // input_file.read_to_string(&mut service_data).expect(&format!(
+    //     "Failed to read {:?}",
+    //     input_path,
+    // ));
 
     let service: BotocoreService = serde_json::from_str(&service_data).expect(&format!(
         "Could not convert JSON in {:?} to Service",
