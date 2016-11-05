@@ -11,7 +11,7 @@ extern crate rusoto;
 use std::io::Read;
 use std::fs::File;
 use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::s3::{S3Helper, S3Client, ListObjectsRequest, HeadObjectRequest};
+use rusoto::s3::{S3Helper, S3Client, ListObjectsRequest, HeadObjectRequest, CreateBucketRequest};
 
 #[test]
 fn list_buckets_tests() {
@@ -22,6 +22,29 @@ fn list_buckets_tests() {
     for q in response.buckets {
         info!("Existing bucket: {:?}", q.name);
     }
+}
+
+#[test]
+fn create_bucket_in_useast1_and_use_immediately() {
+    let s3 = S3Client::new(DefaultCredentialsProvider::new().unwrap(), Region::UsEast1);
+    let create_bucket_request = CreateBucketRequest{
+        bucket: "rusoto_foo_bucket".to_string(),
+        ..Default::default()
+    };
+    let bucket_creation_result = s3.create_bucket(&create_bucket_request).unwrap();
+    println!("bucket created: {:?}", bucket_creation_result);
+
+    let mut f = File::open("tests/sample-data/no_credentials").unwrap();
+    let mut contents : Vec<u8> = Vec::new();
+    match f.read_to_end(&mut contents) {
+        Err(why) => panic!("Error opening file to send to S3: {}", why),
+        Ok(_) => {
+            let s3_helper = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), Region::UsEast1);
+            let put_response = s3_helper.put_object("rusoto_foo_bucket", "no_credentials", &contents).unwrap();
+            println!("put_response is {:?}", put_response);
+        }
+    }
+
 }
 
 #[test]
