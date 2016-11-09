@@ -9,8 +9,9 @@ environment:
   matrix:
     # Stable channel
     - TARGET: x86_64-pc-windows-msvc
-      CHANNEL: 1.11.0
-
+      CHANNEL: 1.11.0 # 1.11.0 compiles faster than 1.12.0, we're keeping 1.11.0
+cache:
+  - 'C:\Users\appveyor\.cargo'
 # Install Rust and Cargo
 # (Based on from https://github.com/rust-lang/libc/blob/master/appveyor.yml)
 install:
