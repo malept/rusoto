@@ -7,7 +7,6 @@ environment:
     # This will be used as part of the zipfile name
     PROJECT_NAME: rusoto
   matrix:
-    # Stable channel
     - TARGET: x86_64-pc-windows-msvc
       CHANNEL: 1.11.0 # 1.11.0 compiles faster than 1.12.0, we're keeping 1.11.0
 cache:
